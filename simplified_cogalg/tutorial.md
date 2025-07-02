@@ -157,6 +157,34 @@ for i, cluster in enumerate(clusters):
 - This creates a hierarchy (patterns of patterns)
 - Complex objects are recognized as combinations of simpler patterns
 
+## Step 5: Recursive Hierarchical Clustering
+
+The real power of CogAlg comes from recursive clustering - building multiple levels of hierarchy.
+
+```python
+from simplified_cogalg.core.hierarchical_clustering import build_hierarchical_graph
+
+# Build a multi-level hierarchy
+graph = build_hierarchical_graph(patterns, similarity_threshold=0.6, max_levels=3)
+
+# Explore the hierarchy
+print(f"Built hierarchy with {graph.max_level + 1} levels")
+for level in range(graph.max_level + 1):
+    nodes = graph.get_nodes_at_level(level)
+    print(f"Level {level}: {len(nodes)} nodes")
+
+# Visualize the hierarchy
+from simplified_cogalg.core.hierarchical_clustering import visualize_hierarchy
+visualize_hierarchy(graph, image.shape)
+```
+
+**What's happening:**
+- Level 0: Individual patterns (blobs)
+- Level 1: Groups of similar patterns
+- Level 2: Groups of groups (super-clusters)
+- Each level is more abstract than the previous
+- This mimics how we recognize complex objects from simple features
+
 ## Complete Example
 
 Let's put it all together with a real image:
