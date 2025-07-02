@@ -275,9 +275,10 @@ def cluster_nodes(nodes: List[GraphNode],
     node_to_cluster = {}
     clusters = []
     cluster_id = 0
+    processed_nodes = set()
     
     for node in nodes:
-        if node in node_to_cluster:
+        if id(node) in processed_nodes:
             continue
         
         # Start new cluster
@@ -286,29 +287,27 @@ def cluster_nodes(nodes: List[GraphNode],
         
         # Flood-fill to find all connected nodes
         to_process = [node]
-        processed = set()
+        local_processed = set()
         
         while to_process:
             current = to_process.pop()
-            if current in processed:
+            if id(current) in local_processed:
                 continue
             
-            processed.add(current)
+            local_processed.add(id(current))
+            processed_nodes.add(id(current))
             cluster.add_sub_node(current)
-            node_to_cluster[current] = cluster
+            node_to_cluster[id(current)] = cluster
             
             # Find connected nodes through links
             for link in current.links:
                 other = link.node2 if link.node1 == current else link.node1
-                if other in nodes and other not in processed:
+                if other in nodes and id(other) not in local_processed:
                     to_process.append(other)
         
         # Only keep clusters with multiple nodes
         if len(cluster.sub_nodes) > 1:
             clusters.append(cluster)
-        else:
-            # Single node doesn't form a cluster
-            del node_to_cluster[node]
     
     return clusters
 

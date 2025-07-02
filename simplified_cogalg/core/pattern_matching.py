@@ -257,8 +257,8 @@ def cluster_patterns(patterns: List[Pattern], threshold=0.7) -> List[List[Patter
             for j in range(i + 1, len(clusters)):
                 # Compare cluster representatives (first pattern in each)
                 similarity = compare_patterns(
-                    Pattern(id=-1, blobs=sum([p.blobs for p in clusters[i]], [])),
-                    Pattern(id=-1, blobs=sum([p.blobs for p in clusters[j]], []))
+                    Pattern(id=-1, blobs=sum([p.blobs for p in clusters[i]], []), features={}),
+                    Pattern(id=-1, blobs=sum([p.blobs for p in clusters[j]], []), features={})
                 ).similarity
                 
                 if similarity > best_similarity and similarity >= threshold:
